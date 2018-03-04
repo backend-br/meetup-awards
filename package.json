@@ -1,0 +1,15 @@
+{
+  "name": "search-twitter-count",
+  "version": "1.0.0",
+  "description": "Search Twitter with tag specific and count by User",
+  "main": "index.js",
+  "dependencies": {
+    "twit": "^2.2.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "backend-br",
+  "license": "MIT"
+}
