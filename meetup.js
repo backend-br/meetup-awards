@@ -1,33 +1,46 @@
-var request = require('request')
+const request = require('request-promise-native')
+const env = require('./env.json')
 
-function Meetup (subject) {
-    this.KEY = '';
-    this.ORG = 'BackEndBr';
-    this.EVENT_ID = '247616504';
-    this.ENDPOINT = 'http://api.meetup.com/';
+/**
+ * Meetup.com API
+ * @returns {object} instance of itself
+ */
+function Meetup () {
+  this.KEY = env.key || ''
+  this.ORG = 'BackEndBr'
+  this.EVENT_ID = '247616504'
+  this.ENDPOINT = 'http://api.meetup.com/'
 
-    this.URL = this.ENDPOINT + this.ORG + '/events/' + this.EVENT_ID + '/rsvps?key=' + this.KEY + '&sign=true';
+  this.URL = this.ENDPOINT + this.ORG + '/events/' + this.EVENT_ID + '/rsvps?key=' + this.KEY + '&sign=true'
 }
 
-Meetup.prototype.getMemberConfirmeds = function () {
-    request(this.URL, function(error, response, body) {
-        let members = JSON.parse(body)
-        let count = members.length
-        let countMembersConfirmed = 0
-        let membersSort = []
+/**
+ * Get confirmed members
+ * @throws {Error} if could not complete request
+ * @returns {array} with member names
+ */
+Meetup.prototype.getConfirmedMembers = async function () {
+  const response = await request({ uri: this.URL, json: true })
+  let membersSort = []
 
-        for (i = 0; i <= count; i++) {
-            if (i in members) {
-                if (members[i]['response'] == 'yes') {
-                    countMembersConfirmed++;
-                    
-                    membersSort.push(members[i]['member']['name'])
-                }
-            }
-        }
+  for (let i = 0; i <= response.length; i++) {
+    if (i in response) {
+      if (response[i]['response'] === 'yes') {
+        membersSort.push(response[i]['member']['name'])
+      }
+    }
+  }
 
-        console.log(membersSort[Math.floor(Math.random() * membersSort.length)])
-    })
+  return membersSort
+}
+
+/**
+ * Sorts an array and returns a name
+ * @param {array} list - array to be sorted
+ * @returns {string} a random item from array
+ */
+Meetup.prototype.sort = function (list) {
+  return list[Math.floor(Math.random() * list.length)]
 }
 
 module.exports = Meetup
