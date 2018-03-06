@@ -26,7 +26,7 @@ Meetup.prototype.getMemberConfirmeds = function () {
             }
         }
 
-        return membersSort[Math.floor(Math.random() * membersSort.length)]
+        console.log(membersSort[Math.floor(Math.random() * membersSort.length)])
     })
 }
 

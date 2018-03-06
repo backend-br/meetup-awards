@@ -1,10 +1,14 @@
-const Twitter = require('./twitter')
+const app = require('express')();
+const http = require('http').Server(app)
 const Meetup = require('./meetup')
 
-// const tt = new Twitter('backendbrasil')
 const mt = new Meetup('backendbrasil')
 
-// console.log(tt.getPostAbout())
-memberWin = mt.getMemberConfirmeds()
+app.get('/', function(req, res){
+    mt.getMemberConfirmeds()
+	res.sendFile(__dirname + '/index.html');
+});
 
-console.log(memberWin)
+http.listen(3000, () => {
+	console.log('Listening local port 3000');
+});

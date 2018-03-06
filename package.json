@@ -4,6 +4,7 @@
   "description": "Search Twitter with tag specific and count by User",
   "main": "index.js",
   "dependencies": {
+    "express": "^4.16.2",
     "request": "^2.83.0",
     "twit": "^2.2.9"
   },
