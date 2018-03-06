@@ -5,4 +5,6 @@ const Meetup = require('./meetup')
 const mt = new Meetup('backendbrasil')
 
 // console.log(tt.getPostAbout())
-console.log(mt.getMemberConfirmeds())
+memberWin = mt.getMemberConfirmeds()
+
+console.log(memberWin)
