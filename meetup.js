@@ -30,6 +30,7 @@ Meetup.prototype.getConfirmedMembers = function () {
       }
     }
   }
+
   return membersSort
 }
 

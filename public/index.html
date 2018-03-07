@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
+    <title>Sorteio Meetup</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body, html {
@@ -69,7 +69,25 @@
                 Da comunidade para comunidade.
             <p>
         </div>
+
+        <a href="javascript:sortear();">Sortear</a>
     </div>
 
+    <script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous"></script>
+    <script>
+        function sortear() {
+            $.ajax({
+                url: '/win',
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#win').html(data['member']);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
