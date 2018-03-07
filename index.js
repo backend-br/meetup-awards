@@ -1,11 +1,13 @@
 const app = require('express')();
 const http = require('http').Server(app)
-// const Meetup = require('./meetup')
+const Meetup = require('./meetup')
 
-// const mt = new Meetup('backendbrasil')
+const mt = new Meetup('backendbrasil')
 
-app.get('/', function(req, res){
-	res.sendFile(__dirname + '/index.html');
+mt.getConfirmedMembers();
+
+app.get('/', function(req, res){    
+	res.sendFile(__dirname + '/public/index.html');
 });
 
 http.listen(3000, () => {

@@ -19,8 +19,8 @@ function Meetup () {
  * @throws {Error} if could not complete request
  * @returns {array} with member names
  */
-Meetup.prototype.getConfirmedMembers = async function () {
-  const response = await request({ uri: this.URL, json: true })
+Meetup.prototype.getConfirmedMembers = function () {
+  const response = request({ uri: this.URL, json: true })
   let membersSort = []
 
   for (let i = 0; i <= response.length; i++) {
@@ -30,7 +30,6 @@ Meetup.prototype.getConfirmedMembers = async function () {
       }
     }
   }
-
   return membersSort
 }
 
