@@ -3,7 +3,7 @@ const http = require('http').Server(app)
 const Meetup = require('./meetup')
 const path = require('path')
 const env = require('./env')
-const mt = new Meetup('247616504', 'BackEndBr', env.key)
+const mt = new Meetup(env.event_id, env.org, env.key)
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '/public/index.html'))
