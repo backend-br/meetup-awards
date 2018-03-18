@@ -1,17 +1,16 @@
-const request = require('request-promise-native')
-const env = require('./env.json')
+const axios = require('axios')
 
 /**
  * Meetup.com API
  * @returns {object} instance of itself
  */
-function Meetup () {
-  this.KEY = env.key || ''
-  this.ORG = 'BackEndBr'
-  this.EVENT_ID = '247616504'
-  this.ENDPOINT = 'http://api.meetup.com/'
+function Meetup (eventId, orgName, key) {
+  this.key = key
+  this.org = orgName
+  this.event_id = eventId
+  this.endpoint = 'http://api.meetup.com/'
 
-  this.URL = this.ENDPOINT + this.ORG + '/events/' + this.EVENT_ID + '/rsvps?key=' + this.KEY + '&sign=true'
+  this.url = `${this.endpoint}${this.org}/events/${this.event_id}/rsvps?key=${this.key}&sign=true`
 }
 
 /**
@@ -19,28 +18,33 @@ function Meetup () {
  * @throws {Error} if could not complete request
  * @returns {array} with member names
  */
-Meetup.prototype.getConfirmedMembers = function () {
-  const response = request({ uri: this.URL, json: true })
-  let membersSort = []
+Meetup.prototype.getConfirmedMembers = async function () {
+  let response = await axios.get(this.url)
+  let confirmedMembers = []
 
-  for (let i = 0; i <= response.length; i++) {
-    if (i in response) {
-      if (response[i]['response'] === 'yes') {
-        membersSort.push(response[i]['member']['name'])
+  if (response.status !== 200) {
+    throw new Error('Could not complete request!')
+  }
+
+  for (let i = 0; i <= response.data.length; i++) {
+    if (i in response.data) {
+      if (response.data[i]['response'] === 'yes') {
+        confirmedMembers.push(response.data[i]['member']['name'])
       }
     }
   }
 
-  return membersSort
+  return confirmedMembers
 }
 
 /**
- * Sorts an array and returns a name
+ * getWinner returns a winner
  * @param {array} list - array to be sorted
  * @returns {string} a random item from array
  */
-Meetup.prototype.sort = function (list) {
-  return list[Math.floor(Math.random() * list.length)]
+Meetup.prototype.getWinner = function (list) {
+  const index = Math.floor(Math.random() * list.length)
+  return list[index] || ''
 }
 
 module.exports = Meetup
