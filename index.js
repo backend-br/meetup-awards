@@ -1,33 +1,28 @@
-const app = require('express')();
+const app = require('express')()
 const http = require('http').Server(app)
 const Meetup = require('./meetup')
-const request = require('request-promise-native')
+const path = require('path')
+const env = require('./env')
+const mt = new Meetup(env.event_id, env.org, env.key)
 
-const mt = new Meetup('backendbrasil')
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, '/public/index.html'))
+})
 
-app.get('/', function(req, res) { 
-	res.sendFile(__dirname + '/public/index.html');
-});
+app.get('/win', function (req, res) {
+  const result = async () => {
+    let confirmedMembers = await mt.getConfirmedMembers()
 
-app.get('/win', function(req, res) {
-	const response = request({ uri: mt.URL, json: true }).then(function(response) {
-		let membersSort = []
+    return mt.getWinner(confirmedMembers)
+  }
 
-		for (let i = 0; i <= response.length; i++) {
-			if (i in response) {
-				if (response[i]['response'] === 'yes') {
-					membersSort.push(response[i]['member']['name'])
-				}
-			}
-		}
-		
-		member = membersSort[Math.floor(Math.random() * membersSort.length)]
-		
-		res.setHeader('Content-Type', 'application/json');
-		res.send(JSON.stringify({ member: member }));
-	})
+  res.setHeader('Content-Type', 'application/json')
+
+  result()
+    .then(winner => res.end(JSON.stringify({ member: winner })))
+    .catch(e => res.end(JSON.stringify({ message: e.message, name: e.name })))
 })
 
 http.listen(3000, () => {
-	console.log('Listening local port 3000');
-});
+  console.log('Listening local port 3000')
+})
